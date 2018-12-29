@@ -8,6 +8,7 @@ class Player
   public:
     static Position position;
     static void move();
+    static void shoot(Position mousePosition);
     static bool checkCollision();
     void drawPlayer();
   private:

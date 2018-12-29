@@ -4,12 +4,18 @@
 #include "Player.h"
 #include "Controls.h"
 #include "Terrain.h"
+#include "BulletControl.h"
 
-float Player::speed = 0.1f;
+float Player::speed = 1.0f;
 
 int Player::size = 10;
 
 Position Player::position = {200, 200};
+
+void Player::shoot(Position mousePosition) {
+    Bullet bullet = Bullet(position, mousePosition);
+    BulletControl::addBullet(bullet);
+}
 
 void Player::move()
 {
@@ -44,9 +50,9 @@ bool Player::checkCollision()
         double xLine = line.a.x > line.b.x ? line.b.x : line.a.x;
         double yLine = line.a.y > line.b.y ? line.b.y : line.a.y;
         bool xCollision = position.x + size >= xLine &&
-                          xLine + abs(line.a.x - line.b.x) >= position.x;
+                          xLine + abs(line.a.x - line.b.x) >= position.x - size;
         bool yCollision = position.y + size >= yLine &&
-                          yLine + abs(line.a.y - line.b.y) >= position.y;
+                          yLine + abs(line.a.y - line.b.y) >= position.y - size;
         if (xCollision && yCollision)
             return true;
     }
@@ -57,9 +63,9 @@ void Player::drawPlayer()
 {
     glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_POLYGON);
-    glVertex2f(position.x, position.y);
-    glVertex2f(position.x + size, position.y);
+    glVertex2f(position.x - size, position.y - size);
+    glVertex2f(position.x + size, position.y - size);
     glVertex2f(position.x + size, position.y + size);
-    glVertex2f(position.x, position.y + size);
+    glVertex2f(position.x - size, position.y + size);
     glEnd();
 }
